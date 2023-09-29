@@ -1,6 +1,6 @@
 ﻿namespace MyApp_DAO.Models
 {
-     
+
     public class Product
     {
         public int id { get; set; }
