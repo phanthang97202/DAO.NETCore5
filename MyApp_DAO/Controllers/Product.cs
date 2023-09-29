@@ -41,26 +41,31 @@ namespace MyApp_DAO.Controllers
         [HttpPost]
         public IActionResult CreateNew(MyApp_DAO.Models.Product product)
         {
-            //System.Boolean products = _productService.CreateNewProduct(p);
-            //return Ok(products);
             if (product == null)
             {
                 return BadRequest("Invalid product data.");
             }
+            int result = _productService.CreateNewProduct(product);
 
-
-            int productId = _productService.CreateNewProduct(product);
-
-            if (productId > 0)
+            if (result > 0)
             {
-                // Return a response with the newly created product ID
-                return Ok(productId);
+                return Ok(result);
             }
-
             return StatusCode(500, "Failed to create the product.");
         }
-        // cập nhật thông tin sản phẩm
 
         // xóa sản phẩm
+        [HttpDelete("delete")]
+        public IActionResult DeleteMultiProducts(int[] ids)
+        {
+            var result = _productService.DeleteMultiProduct(ids);
+            return Ok(new
+            {
+                EffectedRows = result
+            });
+        }
+
+        // cập nhật thông tin sản phẩm
+
     }
 }

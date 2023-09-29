@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using Product = MyApp_DAO.Models.Product;
 
@@ -132,9 +133,44 @@ namespace MyApp_DAO.Services
             }
         }
 
-        internal int CreateNewProduct(Controllers.Product product)
+
+        // xóa 1/nhiều sản phẩm
+        public int DeleteMultiProduct(int[] ids)
         {
-            throw new NotImplementedException();
+            string listIds = "";
+            try
+            {
+                using (var connection = new SqlConnection(_connectionDB))
+                {
+                    connection.Open();
+                    for (var id = 0; id < ids.Length; id++)
+                    {
+                        if (id > 0)
+                        {
+                            listIds += "," + ids[id];
+
+                        }
+                        else
+                        {
+                            listIds += ids[id];
+                        }
+                    }
+                    using var command = new SqlCommand();
+                    command.Connection = connection;
+                    string query = $"DELETE FROM product WHERE id IN ({listIds})";
+                    command.CommandText = query;
+                    int rowsAffected = command.ExecuteNonQuery();
+                    connection.Close();
+                    return rowsAffected;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return 0;
+            }
         }
+
+
     }
 }
