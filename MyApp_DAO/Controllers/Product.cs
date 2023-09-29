@@ -66,6 +66,21 @@ namespace MyApp_DAO.Controllers
         }
 
         // cập nhật thông tin sản phẩm
+        [HttpPatch("update")]
+        public IActionResult UpdateProduct(MyApp_DAO.Models.Product product)
+        {
+            if (product == null)
+            {
+                return BadRequest("Invalid product data.");
+            }
+            int result = _productService.UpdateProduct(product);
+
+            if (result > 0)
+            {
+                return Ok(result);
+            }
+            return StatusCode(500, "Failed to update the product.");
+        }
 
     }
 }

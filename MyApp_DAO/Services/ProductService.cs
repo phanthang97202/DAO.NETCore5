@@ -171,6 +171,35 @@ namespace MyApp_DAO.Services
             }
         }
 
+        // cập nhật sản phẩm
+        public int UpdateProduct(Product product)
+        {
 
+            try
+            {
+                using (var connection = new SqlConnection(_connectionDB))
+                {
+                    connection.Open();
+                    using var command = new SqlCommand();
+                    command.Connection = connection;
+                    string query = @"update product set name = @name, price = @price, description = @description, category = @category where id = @id";
+                    command.CommandText = query;
+
+                    command.Parameters.AddWithValue("@id", product.id);
+                    command.Parameters.AddWithValue("@name", product.name);
+                    command.Parameters.AddWithValue("@price", product.price);
+                    command.Parameters.AddWithValue("@description", product.description);
+                    command.Parameters.AddWithValue("@category", product.category);
+                    var reader = command.ExecuteNonQuery();
+                    connection.Close();
+                    return 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return 0;
+            }
+        }
     }
 }
